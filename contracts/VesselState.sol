@@ -1,14 +1,52 @@
+pragma solidity ^0.4.2;
+
+import "VesselStateLib.sol";
+
 contract VesselState {
-  uint public indentifier;
-  uint public indentifier_type;
-  uint public updated_at;
-  uint public latitude;
-  uint public longitude;
-  uint public altitude;
-  uint public velocity;
-  uint public heading;
+	struct State {
+		address verified_by;
+    string  vessel_type;
+		uint		indentifier;
+		string	indentifier_type;
+		uint		updated_at;
+		uint		latitude;
+		uint		longitude;
+		uint		altitude;
+		uint		velocity;
+		uint		heading;
+	}
+
+  mapping (string => State) states;
 
   function VesselState() {
-    // constructor
+    // setup transaction validators/origins
+  }
+
+  function newState(
+    address verified_by,
+    string  vessel_type,
+    uint    identifier,
+    string  identifier_type,
+    uint    latitude,
+    uint    longitude,
+    uint    altitude,
+    uint    velocity,
+    uint    heading,
+    uint    updated_at
+  ) {
+    
+    string memory global_identifier = VesselStateLib.calculateStateIdentifier(vessel_type, identifier, identifier_type);
+    states[global_identifier] = State(
+			verified_by,
+      vessel_type,
+			identifier,
+			identifier_type,
+			latitude,
+			longitude,
+			altitude,
+			velocity,
+			heading,
+			updated_at
+    );
   }
 }
